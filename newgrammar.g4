@@ -1,10 +1,22 @@
-grammar newgrammar;
+grammar Expr;
+
+WHITESPACE : [ \b\t\n\r] -> skip; 
+
+NUMBER
+    : [0-9]+
+    ;
+
+ID
+    : ([a-z] | [A-Z]) ([a-z] | [A-Z] | [0-9] | '_' | '-')*
+    ;
+
 
 prog: 
-    main classe*
+    main 
+    classe*
     ;
- 
-main: 
+
+main:  
     'class' ID '{' 
         'public' 'static' 'void' 'main' '(' 'String' '[' ']' ID ')' '{'
             cmd? 
@@ -12,7 +24,7 @@ main:
     '}'
     ;
 
-classe: 
+classe:  
     'class' ID ('extends' ID)? '{' 
         (var | metodo)* 
     '}'
@@ -28,124 +40,55 @@ metodo:
     '}'
     ;
 
-params: 
+params:  
     tipo ID (',' tipo ID)*;
 
-tipo
+tipo  
     : 'int' ('[' ']')*
     | 'boolean'
     | ID 
     ;
 
-cmd
+cmd 
     : '{' (cmd)? '}'
     | 'if' '(' exp ')' cmd ('else' cmd)?
     | 'while' '(' exp ')' cmd
-    | 'System.out.println' '(' exp ')' ';'
+    | 'System' '.' 'out' '.' 'println' '(' exp ')' ';'
     | ID ( '=' exp ';' | '[' exp ']' '=' exp ';' )
     ;
 
-exp
+exp  
     : rexp ('&&' rexp)*
     ;
 
-rexp
+rexp  
     : aexp ('<' aexp | '==' aexp | '!=' aexp)*
     ;
 
-aexp
+aexp  
     : mexp ('+' mexp | '-' mexp)*
     ;
 
-mexp
+mexp  
     : sexp ('*' sexp | '/' sexp)*
     ;
 
-sexp
+sexp 
     : ('!' | '-') sexp
     | 'true'
     | 'false'
-    //| 'num' //perguntar
-    | 'new' ( 'int' '[' exp ']' | ID '(' ')' ('.' 'length' | '[' exp ']')? )
+    | 'new' ( 'int' '[' exp ']' | ID '(' ')') pexp
     | pexp ('.' 'length' | '[' exp ']')?
     ;
 
-pexp
-    : ID
-    | NUMBER //nao havia numeros
-    | 'this'
+pexp  
+    : ID ('(' ')')?
+    | NUMBER
+    | 'this' pexp?
     | '(' exp ')'
-    | ('.' ID ( '(' (exps)? ')' )? ) pexp
+    | ('.' ID ( '(' (exps)? ')' )? ) pexp?
     ;
 
-exps: 
+exps:  
     exp (',' exp)*
-    ;
-
-IGNORE 
-    : (WHITESPACE | COMMENTLINE | COMMENTLINES) -> skip
-    ;
-
-WHITESPACE
-    : [ \b\t\n\r]
-    ;
-
-COMMENTLINES
-    : '/*' .*? '*/'
-    ;
-
-COMMENTLINE
-    : '//' .*? [\n] 
-    ;
-
-RESERVEDWORDS
-    : 'boolean'
-    | 'class'
-    | 'extends'
-    | 'public'
-    | 'static'
-    | 'void'
-    | 'main'
-    | 'String'
-    | 'return'
-    | 'int'
-    | 'if'
-    | 'else'
-    | 'while'
-    | 'System.out.println'
-    | 'length'
-    | 'true'
-    | 'false'
-    | 'this'
-    | 'new'
-    ;
-
-NUMBER
-    : [0-9]+
-    ;
-
-OPERATORSPOINTING
-    : '('
-    | ')'
-    | '['
-    | ']'
-    | '{'
-    | '}'
-    | ';'
-    | '.'
-    | ','
-    | '='
-    | '<'
-    | '=='
-    | '!='
-    | '+'
-    | '-'
-    | '*'
-    | '/'
-    | '&&'
-    | '!'
-    ;
-
-ID
-    : ([a-z] | [A-Z]) ([a-z] | [A-Z] | [0-9] | '_' | '-')*
     ;
