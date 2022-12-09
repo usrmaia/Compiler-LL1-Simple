@@ -1,5 +1,6 @@
 import sys
 from Lexer import Lexer
+from analiseSintatica import Grammar
 
 def main(argv):
     input_ = open(argv[1], 'r')
@@ -8,7 +9,8 @@ def main(argv):
     lexer = Lexer(input_stream)
     stream = lexer.getOutput()
     print("Output", stream) 
-
+    parser = Grammar(stream)
+    parser.prog()
     input_.close()
     
 if __name__=="__main__":
