@@ -8,6 +8,8 @@ comentario*/
 class Factorial{
     public static void main(String[] a){
         num_aux = num * (this.ComputeFac(num-1));
+        num_aux = num * (this.ComputeFac(num-1));
+        num_aux = num * (this.ComputeFac(num-1));
     }
 }
 

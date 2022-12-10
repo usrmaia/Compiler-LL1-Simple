@@ -34,11 +34,14 @@ class Parser(Checking):
         self.match(")")
         self.match("{")
 
-        if self.prox() == "{": self.cmd()
-        if self.prox() == "if": self.cmd()
-        if self.prox() == "while": self.cmd()
-        if self.prox() == "System": self.cmd()
-        if self.prox() == "ID": self.cmd()
+        while True:
+            if  self.prox() == "{" or \
+                self.prox() == "if" or \
+                self.prox() == "while" or \
+                self.prox() == "System" or \
+                self.prox() == "ID": 
+                self.cmd()
+            else: break
         
         self.match("}")
         self.match("}")

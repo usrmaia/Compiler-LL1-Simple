@@ -19,7 +19,7 @@ prog:
 main:  
     'class' ID '{' 
         'public' 'static' 'void' 'main' '(' 'String' '[' ']' ID ')' '{'
-            cmd? 
+            cmd*
         '}' 
     '}'
     ;
