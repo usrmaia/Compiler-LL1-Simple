@@ -20,8 +20,34 @@ class Lexer():
     self.AddTokens()
     self.table_simbols.print()
     self.getOutput()
+  
+  def Error(self, err):
+    list_err = self.output[:err]
+    print(list_err)
+    """
+    """
+    line, column = 0, 0
+    while line == 0 and column == 0:
+      try: 
+        line, column = self.ReturnError(list_err, err)
+      except:
+        err -= 1
+        list_err = list_err[:-1]
 
-# ['/*', '//', 'esse', ' ', '\n', 'é', ' ', '\n', 'um', ' ', '\n', 'comentario', '*/', '\n', '\n', '//', ' ', 'este', ' ', 'é', ' ', 'outro', ' ', 'comentario', '\n', '\n', 'class', ' ', 'Factorial', '{', '\n', ' ', ' ', ' ', ' ', 'public', ' ', 'static', ' ', 'void', ' ', 'main', '(', 'String', '[', ']', ' ', 'a', ')', '{', '\n', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'System', '.', 'out', '.', 'println', '(', 'new', ' ', 'Fac', '(', ')', '.', 'ComputeFac', '(', '10', ')', ')', ';', '\n', ' ', ' ', ' ', ' ', '}', '\n', '}', '\n', '\n', 'class', ' ', 'Fac', ' ', '{', '\n', ' ', ' ', ' ', ' ', 'public', ' ', 'int', ' ', 'ComputeFac', '(', 'int', ' ', 'num', ')', '{', '\n', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'int', ' ', 'numaux', ';', '\n', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'if', ' ', '(', 'num', ' ', '<', ' ', '157', ')', '\n', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'num_aux', ' ', '=', ' ', '1', ';', '\n', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'else', '\n', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'num_aux', ' ', '=', ' ', 'num', ' ', '*', ' ', '(', 'this', '.', 'ComputeFac', '(', 'num', '-', '1', ')', ')', ';', '\n', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'return', ' ', 'num_aux', ';', '\n', ' ', ' ', ' ', ' ', '}', '\n', '}', '\n', '\n', 'class', ' ', 'Fac2', ' ', 'extends', ' ', 'outraFuncao', '{', '\n', ' ', ' ', ' ', ' ', 'public', ' ', 'int', ' ', 'ComputeFac', '(', 'int', ' ', 'num', ')', '{', '\n', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'if', ' ', '(', 'num', ' ', '<', ' ', '1', ')', '\n', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'num', '-', 'aux', ' ', '=', ' ', '1', ';', '\n', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'else', '\n', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'num', '-', 'aux', ' ', '=', ' ', 'num', ' ', '*', ' ', '(', 'this', '.', 'ComputeFac', '(', 'num', '-', '1', ')', ')', ';', '\n', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'return', ' ', 'num', '-', 'aux', ';', '\n', ' ', ' ', ' ', ' ', '}', '\n', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'int', ' ', 'numaux', ';', '\n', '}', '\n', '//', ' ', 'outro', ' ', 'comentario', '\n', '\n']
+    print(f"Parse Error in {line}:{column}")
+  
+  def ReturnError(self, list_err, err):
+    symbol_err = self.output[err]
+    type = ""
+
+    if self.isLiteralNames(symbol_err): type = "LITERALNAMES"
+    elif self.isNumber(symbol_err): type = "NUMBER"
+    elif self.isID(symbol_err): type = "ID"
+
+    index = list_err.count(symbol_err)
+
+    return self.table_simbols.getPosition(type, symbol_err, index)
+
   def getOutput(self):
     return self.output
 

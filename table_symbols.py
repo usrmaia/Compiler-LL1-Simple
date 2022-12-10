@@ -7,6 +7,9 @@ class TableSymbols():
     }
 
   def AddToken(self, type, token, line, column):
+    line += 1
+    column += 1
+
     if type not in list(self.Table.keys()): exit(-1)
     elif not self.existToken(token, type):
       get_type = self.Table.get(type)
@@ -51,7 +54,16 @@ class TableSymbols():
     if position in get_pos: return True
     return False
     
-  def getTokens(): pass
+  def getPosition(self, type, token, index):
+    list_position = self.Table.get(type)
+
+    for p in list_position:
+      if token == p.get("name"): 
+        list_pos = p.get("pos")
+        position = list_pos[index]
+        return position[0], position[1]
+
+    return False
   
   def print(self):
     keys = self.Table.keys()

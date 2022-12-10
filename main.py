@@ -13,7 +13,7 @@ def main(argv):
     
     parser = Parser(stream)
     result, err = parser.prog()
-    if err: pass
+    if err: lexer.Error(err)
     else: print(result)
     
     input_.close()

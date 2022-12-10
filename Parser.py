@@ -15,7 +15,7 @@ class Parser(Checking):
 
         except:
             print("Error")
-            return None, self.i
+            return None, self.i - 1
     
     def main(self):
         print("main")
