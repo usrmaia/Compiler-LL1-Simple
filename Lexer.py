@@ -17,46 +17,20 @@ class Lexer():
     self.input = input
     self.output = []
     self.SetInput()
+    print("SetInput = ", self.input, end="\n\n")
     self.AddTokens()
+    print("AddTokens = ", self.output, end="\n\n")
     self.table_simbols.print()
-    self.getOutput()
   
-  def Error(self, err):
-    list_err = self.output[:err]
-    print(list_err)
-    """
-    """
-    line, column = 0, 0
-    while line == 0 and column == 0:
-      try: 
-        line, column = self.ReturnError(list_err, err)
-      except:
-        err -= 1
-        list_err = list_err[:-1]
-
-    print(f"Parse Error in {line}:{column}")
+  def SetInput(self):
+    self.SeparateSpace()
+    self.SeparateTerminals()
   
-  def ReturnError(self, list_err, err):
-    symbol_err = self.output[err]
-    type = ""
-
-    if self.isLiteralNames(symbol_err): type = "LITERALNAMES"
-    elif self.isNumber(symbol_err): type = "NUMBER"
-    elif self.isID(symbol_err): type = "ID"
-
-    index = list_err.count(symbol_err)
-
-    return self.table_simbols.getPosition(type, symbol_err, index)
-
-  def getOutput(self):
-    return self.output
-
   def AddTokens(self):
     count_line = 0
     count_column = 0
     index = 0
     while True:
-      print(index, self.input[index])
       if self.isComment(index):
         index = self.isComment(index)
         count_line, count_column = self.Position(index)
@@ -77,67 +51,14 @@ class Lexer():
       elif " " in self.input[index]: pass
       elif "\n" in self.input[index]: pass
       elif "*/" in self.input[index]: pass
-      else: exit(-1)
+      else: 
+        print(f"Token '{self.input[index]}' não identificado!")
+        exit(-1)
 
       index += 1
       count_line, count_column = self.Position(index)
       if index == len(self.input) - 1: break
   
-  def Position(self, index):
-    count_line = 0
-    count_column = 0
-    for i in range(0, index + 1):
-      element = self.input[i]
-      if "\n" in element: 
-        count_line += 1
-        count_column = 0
-        continue
-      
-      count_column += len(element)
-    return count_line, count_column
-  
-  def isComment(self, index):
-    element = self.input[index]
-
-    if "/*" in element:
-      for e in range(index, len(self.input)): 
-        if "*/" in self.input[e]:
-          return e
-    if "//" in element:
-      for e in range(index, len(self.input)): 
-        if "\n" in self.input[e]:
-          return e 
-  
-  def isLiteralNames(self, symbol):
-    if symbol in self.literalNames: return True
-    return False
-
-  def isNumber(self, symbol):
-    if symbol.isnumeric(): return True
-    return False
-  
-  def isID(self, symbol):
-    if not symbol[0].isalpha(): return False
-
-    for e in symbol:
-      if e.isalpha(): continue
-      if e.isalnum(): continue
-      if "-" in e: continue
-      if "_" in e: continue
-      return False
-    return True
-
-    
-  def SetInput(self):
-    self.SeparateSpace()
-    print("Separação por espaços:", self.input, end="\n\n")
-    self.SeparateTerminals()
-    print(self.input, end="\n\n")
-  
-  def Next(line, index):
-    if index < 0 or index >= len(line) - 1: return False
-    return line[index + 1]
-    
   def SeparateSpace(self):
     aux_input = []
     for line in self.input:
@@ -166,8 +87,6 @@ class Lexer():
          aux_input.append(i)
       else: aux_input.append(element)
     self.input = aux_input
-
-    print("removendo comentarios", self.input, end="\n\n")
 
     aux_input_ = self.input
     aux_input = []
@@ -213,6 +132,82 @@ class Lexer():
     
     return aux_input
 
+  def Error(self, err):
+    list_err = self.output[:err]
+    line, column = 0, 0
+    while line == 0 and column == 0:
+      try: 
+        line, column = self.ReturnError(list_err, err)
+      except:
+        err -= 1
+        list_err = list_err[:-1]
+
+    print(f"Parse Error in {line}:{column}")
+  
+  def ReturnError(self, list_err, err):
+    symbol_err = self.output[err]
+    type = ""
+
+    if self.isLiteralNames(symbol_err): type = "LITERALNAMES"
+    elif self.isNumber(symbol_err): type = "NUMBER"
+    elif self.isID(symbol_err): type = "ID"
+
+    index = list_err.count(symbol_err)
+
+    return self.table_simbols.getPosition(type, symbol_err, index)
+
+  def getOutput(self):
+    return self.output
+  
+  def Position(self, index):
+    count_line = 0
+    count_column = 0
+    for i in range(0, index + 1):
+      element = self.input[i]
+      if "\n" in element: 
+        count_line += 1
+        count_column = 0
+        continue
+      
+      count_column += len(element)
+    return count_line, count_column
+  
+  def isComment(self, index):
+    element = self.input[index]
+
+    if "/*" in element:
+      for e in range(index, len(self.input)): 
+        if "*/" in self.input[e]:
+          return e
+    if "//" in element:
+      for e in range(index, len(self.input)): 
+        if "\n" in self.input[e]:
+          return e 
+  
+  def isLiteralNames(self, symbol):
+    if symbol in self.literalNames: return True
+    return False
+
+  def isNumber(self, symbol):
+    if symbol.isnumeric(): return True
+    return False
+  
+  def isID(self, symbol):
+    if not symbol[0].isalpha(): return False
+
+    for e in symbol:
+      if e.isalpha(): continue
+      if e.isalnum(): continue
+      if "-" in e: continue
+      if "_" in e: continue
+      return False
+    return True
+  
+  def Next(line, index):
+    if index < 0 or index >= len(line) - 1: return False
+    return line[index + 1]
+  
+  
 """
 aux_input = []
     for l, line in enumerate(self.input):

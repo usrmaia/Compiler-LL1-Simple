@@ -1,4 +1,4 @@
-grammar Expr;
+grammar Grammar;
 
 WHITESPACE : [ \b\t\n\r] -> skip; 
 

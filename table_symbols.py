@@ -6,6 +6,26 @@ class TableSymbols():
       "LITERALNAMES": []
     }
 
+    """
+    self.Table = {
+      "ID": [
+        {'name': 'Factorial', 'pos': [(8, 16)]},
+        {'name': 'a', 'pos': [(9, 39)]},
+        {'name': 'num_aux', 'pos': [(10, 16), (19, 20), (21, 20), (22, 27), (29, 20), (31, 20)]}
+      ],
+      "NUMBER": [
+        {'name': '1', 'pos': [(10, 47), (19, 24), (21, 51), (28, 20), (29, 24), (31, 51)]},
+        {'name': '10', 'pos': [(11, 51)]},
+        {'name': '157', 'pos': [(18, 22)]}
+      ],
+      "LITERALNAMES": [
+        {'name': 'class', 'pos': [(8, 6), (15, 6), (26, 6)]},
+        {'name': '{', 'pos': [(8, 17), (9, 41), (15, 12), (16, 36), (26, 32), (27, 36)]},
+        {'name': 'public', 'pos': [(9, 11), (16, 11), (27, 11)]}
+      ]
+    }
+    """
+
   def AddToken(self, type, token, line, column):
     line += 1
     column += 1
@@ -68,8 +88,9 @@ class TableSymbols():
   def print(self):
     keys = self.Table.keys()
     keys = list(keys)
-    print("TABLE OF SYMBOLS")
+    print("TableSymbols = ")
     for key in keys:
       print(key, ":")
       for d in self.Table.get(key):
         print(d)
+    print("\n")

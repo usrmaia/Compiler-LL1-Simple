@@ -5,11 +5,10 @@ from Parser import Parser
 def main(argv):
     input_ = open(argv[1], 'r')
     input_stream = list(input_)
-    print("input_strem =", input_stream)
+    print("input_strem =", input_stream, end="\n\n")
     
     lexer = Lexer(input_stream)
     stream = lexer.getOutput()
-    print("Output", stream) 
     
     parser = Parser(stream)
     result, err = parser.prog()
