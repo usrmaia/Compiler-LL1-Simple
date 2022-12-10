@@ -23,10 +23,17 @@ class Lexer():
     self.table_simbols.print()
   
   def SetInput(self):
+    """
+    Quebra self.input nas menores partes possíveis [" ", "\n", //, /*, */, ID, NUMBER, LITERALNAMES]
+    """
     self.SeparateSpace()
     self.SeparateTerminals()
   
   def AddTokens(self):
+    """
+    Builda o self.output, removendo de self.input espaços em branco e comentários, 
+    também remove os IDs e substitui por "ID" (análogo ao NUMBER). 
+    """
     count_line = 0
     count_column = 0
     index = 0
@@ -133,18 +140,24 @@ class Lexer():
     return aux_input
 
   def Error(self, err):
+    """
+    Retorna uma mensagem de erro informando linha e coluna.
+    """
     list_err = self.output[:err]
     line, column = 0, 0
     while line == 0 and column == 0:
       try: 
-        line, column = self.ReturnError(list_err, err)
+        line, column = self.ReturnPositionError(list_err, err)
       except:
         err -= 1
         list_err = list_err[:-1]
 
     print(f"Parse Error in {line}:{column}")
   
-  def ReturnError(self, list_err, err):
+  def ReturnPositionError(self, list_err, err):
+    """
+    Consulta a tabela de simbolos para verificar a posição em self.input.
+    """
     symbol_err = self.output[err]
     type = ""
 
@@ -160,6 +173,9 @@ class Lexer():
     return self.output
   
   def Position(self, index):
+    """
+    Informa linha e coluna equivalente ao index.
+    """
     count_line = 0
     count_column = 0
     for i in range(0, index + 1):
@@ -173,6 +189,9 @@ class Lexer():
     return count_line, count_column
   
   def isComment(self, index):
+    """
+    Se for comentário, retorna o index referente ao fim do comentário.
+    """
     element = self.input[index]
 
     if "/*" in element:
